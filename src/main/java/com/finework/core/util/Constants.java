@@ -140,8 +140,10 @@ public interface Constants {
     Integer TRANSPORT_STAFF=1;
     Integer TRANSPORT_FOLLOW_STAFF=2;
     
-    Integer TRANSPORT_TYPE_INTERNAL=1;
-    Integer TRANSPORT_TYPE_EXTERNAL=2;
+    
+    Integer TRANSPORT_TYPE_INTERNAL=1;//พนักงานขับรถภายใน
+    Integer TRANSPORT_TYPE_EXTERNAL=2;//พนักงานขับรถภายนอก
+    
     Integer TRANSPORT_COST_ROUND=1;
     Integer TRANSPORT_COST_DISTANCE=2;
     
