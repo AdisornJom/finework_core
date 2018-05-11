@@ -1,9 +1,7 @@
 package com.finework.core.util;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -25,9 +23,6 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
-import net.sf.jasperreports.export.SimpleExporterInput;
-import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
-import net.sf.jasperreports.export.SimplePdfExporterConfiguration;
 
 public class ReportUtil<T> {
     
@@ -106,6 +101,33 @@ public class ReportUtil<T> {
             String pdfName = pdfCode.concat("-").concat(DateTimeUtil.dateToString(DateTimeUtil.currentDate(), "yyyyMMddHHmmss"));
 
             JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(beanList);
+            jasperPrint = JasperFillManager.fillReport(jasperRealPath, hashMap, beanCollectionDataSource);
+
+            ExternalContext externalContext = context.getExternalContext();
+            externalContext.setResponseHeader("Content-Disposition", "attachment; filename=" + pdfName + PREFIX_PDF);
+
+            JasperExportManager.exportReportToPdfStream(jasperPrint, externalContext.getResponseOutputStream());
+
+            context.getApplication().getStateManager().saveView(context);
+            context.responseComplete();
+
+        } catch (JRException | IOException ex) {
+            JsfUtil.addFacesErrorMessage(ex.getMessage());
+            LOG.error(ex);
+        }
+    }
+    
+    public void exportWHT(String module, String jasperName, String pdfCode, HashMap hashMap, List beanList) {
+        try {
+            context = FacesContext.getCurrentInstance();
+            servletContext = (ServletContext) context.getExternalContext().getContext();
+            jasperRealPath = servletContext.getRealPath(JASPER_REPORT_PATH + module + SEPARATOR + jasperName + PREFIX);
+            
+            hashMap.put("bg50tv", servletContext.getRealPath("/resources/images/50TV.jpg"));
+
+            String pdfName = pdfCode.concat("-").concat(DateTimeUtil.dateToString(DateTimeUtil.currentDate(), "yyyyMMddHHmmss"));
+
+            JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource((Collection)beanList.get(0));
             jasperPrint = JasperFillManager.fillReport(jasperRealPath, hashMap, beanCollectionDataSource);
 
             ExternalContext externalContext = context.getExternalContext();

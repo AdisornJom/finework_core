@@ -98,6 +98,7 @@ public interface Constants {
     String SEQUNCE_NO_ACC="acc";
     String SEQUNCE_NO_DELIVERY="delivery";
     String SEQUNCE_NO_GOOD_RECEIPT_SALE_INVOICE="goodreceipt|salesinvoice";
+    String SEQUNCE_WHT="wht";
     
  /*   String SEQUNCE_NO_B105_="B105";
     String SEQUNCE_NO_B106_="B106";
@@ -184,4 +185,20 @@ public interface Constants {
     Integer TRANSPORT_COST_SPAN=2;//ขนส่งต่อระยะ
     
 
+    Integer LOGISTIC_GROUP_TYPE_SMALL=1;//ขนาดเล็ก
+    Integer LOGISTIC_GROUP_TYPE_LARGE=2;//ขนาดใหญ่
+    
+    Integer TRANSPORT_STAFF_SPECIAL=1;//รายได้พิเศษ ธรรมดา
+    Integer TRANSPORT_STAFF_SPECIAL_NO_VAT=2;//รายได้พิเศษ ธรรมดา
+    
+    
+    
+    //WHT
+    String WHT_SEQ_1="ค่าจ้างทำของ";
+    String WHT_SEQ_2="ค่าโฆษณา";
+    String WHT_SEQ_3="ค่าเช่า";
+    String WHT_SEQ_4="ค่าขนส่ง";
+    String WHT_SEQ_5="ค่าบริการ";
+    String WHT_SEQ_6="ค่าเบี้ยประกันวินาศภัย";
+    String WHT_SEQ_7="อื่นๆ(ระบุ) ";
 }

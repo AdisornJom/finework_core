@@ -189,7 +189,9 @@ public class DateTimeUtil {
         
 //        System.out.println("1." + getDateLong("1442854203"));
         
-        long l = 1442854203 * 1000;
+        //long l = 1442854203 * 1000;
+        
+        System.out.println(DateTimeUtil.cvtDateForShow(DateTimeUtil.getSystemDate(), "dd/MM/yy", new Locale("th", "TH")));
         
     }
     
