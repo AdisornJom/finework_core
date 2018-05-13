@@ -143,6 +143,25 @@ public class ReportUtil<T> {
             LOG.error(ex);
         }
     }
+    public JasperPrint exportWHT_mearge(String module, String jasperName, String pdfCode, HashMap hashMap, List beanList) {
+        JasperPrint jasperPrint1=null;
+       try {
+            hashMap.put("logo", getLogo());
+            context = FacesContext.getCurrentInstance();
+            servletContext = (ServletContext) context.getExternalContext().getContext();
+            jasperRealPath = servletContext.getRealPath(JASPER_REPORT_PATH + module + SEPARATOR + jasperName + PREFIX);
+           
+            hashMap.put("bg50tv", servletContext.getRealPath("/resources/images/50TV.jpg"));
+            
+            JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource((Collection)beanList.get(0));
+            jasperPrint1 = JasperFillManager.fillReport(jasperRealPath, hashMap, beanCollectionDataSource);
+            
+       }catch(Exception ex){
+            JsfUtil.addFacesErrorMessage(ex.getMessage());
+            LOG.error(ex);
+       }
+       return jasperPrint1;
+    }
 
     public void exportSubReport(String module, String[] jasperName, String pdfCode, HashMap hashMap, List beanList) {
         try {
@@ -234,26 +253,9 @@ public class ReportUtil<T> {
                     hashMap.put("subreportDataSource" + (i), new JRBeanCollectionDataSource((Collection)beanList.get(i)));
                 }
             }
-
-           // String pdfName = pdfCode.concat("-").concat(DateTimeUtil.dateToString(DateTimeUtil.currentDate(), "yyyyMMddHHmmss"));
-
             JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource((Collection)beanList.get(0));
             jasperPrint1 = JasperFillManager.fillReport(jasperRealPath, hashMap, beanCollectionDataSource);
             
-            
-
-//            ExternalContext externalContext = context.getExternalContext();
-//            externalContext.setResponseHeader("Content-Disposition", "attachment; filename=" + pdfName + PREFIX_PDF);
-//
-//            JasperExportManager.exportReportToPdfStream(jasperPrint, externalContext.getResponseOutputStream());
-//
-//            context.getApplication().getStateManager().saveView(context);
-//            context.responseComplete();
-
-//         } catch (JRException | IOException ex) {
-//            JsfUtil.addFacesErrorMessage(ex.getMessage());
-//            LOG.error(ex);
-//        }
        }catch(Exception ex){
             JsfUtil.addFacesErrorMessage(ex.getMessage());
             LOG.error(ex);
