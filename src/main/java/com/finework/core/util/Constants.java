@@ -201,4 +201,8 @@ public interface Constants {
     String WHT_SEQ_5="ค่าบริการ";
     String WHT_SEQ_6="ค่าเบี้ยประกันวินาศภัย";
     String WHT_SEQ_7="อื่นๆ(ระบุ) ";
+    
+    
+    Integer VAT3_PERSEN=1;
+    Integer VAT1_PERSEN=2;
 }
