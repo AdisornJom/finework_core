@@ -50,6 +50,10 @@ public class StringUtil {
     public static boolean validatePasswd(String passwd) {
         return passwd.matches(PASSWORD);
     }
+    
+    public static boolean validatePasswd1(String passwd) {
+        return passwd.matches(PASSWORD);
+    }
 
 //    public static Boolean validatePasswd(User member, String passwd) throws Exception {
 //

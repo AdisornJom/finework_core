@@ -100,6 +100,9 @@ public interface Constants {
     String SEQUNCE_NO_GOOD_RECEIPT_SALE_INVOICE="goodreceipt|salesinvoice";
     String SEQUNCE_WHT="wht";
     
+    String SEQUNCE_NO_QUOTATION="QT";
+    String SEQUNCE_NO_QUOTATION2="QT";
+    
  /*   String SEQUNCE_NO_B105_="B105";
     String SEQUNCE_NO_B106_="B106";
     String SEQUNCE_NO_B107_="B107";
@@ -123,6 +126,9 @@ public interface Constants {
     //Transporter
     String SEQUNCE_NO_PREPARE_TRANSPORTER="PTP";
     String SEQUNCE_NO_TRANSPORTATION="TP";
+    
+    //CreateJOB
+    String SEQUNCE_NO_CREATE_JOB="JP";
     
    // String SEQUNCE_NO_GOOD_RECEIPT="goodreceipt";
    // String SEQUNCE_NO_SALES_INVOICE="salesinvoice";
@@ -205,4 +211,12 @@ public interface Constants {
     
     Integer VAT3_PERSEN=1;
     Integer VAT1_PERSEN=2;
+    Integer VAT5_PERSEN=3;
+    
+    Integer COMMON_OPEN_STATUS=1;//ใช้งาน
+    Integer COMMON_CLOSE_STATUS=2;//ปิดใช้งาน
+    
+    //type createjob
+    String CREATEJOB_UPLOAD_IMG="uploadImg";
+    
 }

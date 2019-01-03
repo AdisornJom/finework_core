@@ -25,7 +25,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 
 public class ReportUtil<T> {
-    
+
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ReportUtil.class);
 
     private JasperPrint jasperPrint;
@@ -33,6 +33,7 @@ public class ReportUtil<T> {
     private ServletContext servletContext;
     private String jasperRealPath;
     public static final String LOGO_REPORT_PATH = "/resources/images/log_print.png";
+    public static final String LOGO_REPORT_PATH_1 = "/resources/images/log_print1.png";
     public static final String JASPER_REPORT_PATH = "/resources/jasper/";
     public static final String SEPARATOR = "/";
     public static final String PREFIX = ".jasper";
@@ -45,6 +46,12 @@ public class ReportUtil<T> {
         context = FacesContext.getCurrentInstance();
         servletContext = (ServletContext) context.getExternalContext().getContext();
         return servletContext.getRealPath(LOGO_REPORT_PATH);
+    }
+    
+    public String getLogo1() {
+        context = FacesContext.getCurrentInstance();
+        servletContext = (ServletContext) context.getExternalContext().getContext();
+        return servletContext.getRealPath(LOGO_REPORT_PATH_1);
     }
 
     public String getReportName(String reportCode, Locale l) {
@@ -96,7 +103,6 @@ public class ReportUtil<T> {
             context = FacesContext.getCurrentInstance();
             servletContext = (ServletContext) context.getExternalContext().getContext();
             jasperRealPath = servletContext.getRealPath(JASPER_REPORT_PATH + module + SEPARATOR + jasperName + PREFIX);
-            
 
             String pdfName = pdfCode.concat("-").concat(DateTimeUtil.dateToString(DateTimeUtil.currentDate(), "yyyyMMddHHmmss"));
 
@@ -116,18 +122,18 @@ public class ReportUtil<T> {
             LOG.error(ex);
         }
     }
-    
+
     public void exportWHT(String module, String jasperName, String pdfCode, HashMap hashMap, List beanList) {
         try {
             context = FacesContext.getCurrentInstance();
             servletContext = (ServletContext) context.getExternalContext().getContext();
             jasperRealPath = servletContext.getRealPath(JASPER_REPORT_PATH + module + SEPARATOR + jasperName + PREFIX);
-            
+
             hashMap.put("bg50tv", servletContext.getRealPath("/resources/images/50TV.jpg"));
 
             String pdfName = pdfCode.concat("-").concat(DateTimeUtil.dateToString(DateTimeUtil.currentDate(), "yyyyMMddHHmmss"));
 
-            JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource((Collection)beanList.get(0));
+            JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource((Collection) beanList.get(0));
             jasperPrint = JasperFillManager.fillReport(jasperRealPath, hashMap, beanCollectionDataSource);
 
             ExternalContext externalContext = context.getExternalContext();
@@ -143,24 +149,25 @@ public class ReportUtil<T> {
             LOG.error(ex);
         }
     }
+
     public JasperPrint exportWHT_mearge(String module, String jasperName, String pdfCode, HashMap hashMap, List beanList) {
-        JasperPrint jasperPrint1=null;
-       try {
+        JasperPrint jasperPrint1 = null;
+        try {
             hashMap.put("logo", getLogo());
             context = FacesContext.getCurrentInstance();
             servletContext = (ServletContext) context.getExternalContext().getContext();
             jasperRealPath = servletContext.getRealPath(JASPER_REPORT_PATH + module + SEPARATOR + jasperName + PREFIX);
-           
+
             hashMap.put("bg50tv", servletContext.getRealPath("/resources/images/50TV.jpg"));
-            
-            JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource((Collection)beanList.get(0));
+
+            JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource((Collection) beanList.get(0));
             jasperPrint1 = JasperFillManager.fillReport(jasperRealPath, hashMap, beanCollectionDataSource);
-            
-       }catch(Exception ex){
+
+        } catch (Exception ex) {
             JsfUtil.addFacesErrorMessage(ex.getMessage());
             LOG.error(ex);
-       }
-       return jasperPrint1;
+        }
+        return jasperPrint1;
     }
 
     public void exportSubReport(String module, String[] jasperName, String pdfCode, HashMap hashMap, List beanList) {
@@ -169,20 +176,20 @@ public class ReportUtil<T> {
             context = FacesContext.getCurrentInstance();
             servletContext = (ServletContext) context.getExternalContext().getContext();
             jasperRealPath = servletContext.getRealPath(JASPER_REPORT_PATH + module + SEPARATOR + jasperName[0] + PREFIX);
-           // jasperRealPath="D:\\Work\\A\\Report\\B101Report.jasper";
+            // jasperRealPath="D:\\Work\\A\\Report\\B101Report.jasper";
 
             if (jasperName != null) {
                 for (int i = 1; i < jasperName.length; i++) {
                     hashMap.put("SUBREPORT_DIR", servletContext.getRealPath(JASPER_REPORT_PATH + module + SEPARATOR));
                     //hashMap.put("subreport" + (i), "D:\\Work\\A\\Report\\B101SubReport.jasper");
-                    hashMap.put("subreport" + (i), servletContext.getRealPath(JASPER_REPORT_PATH +module + SEPARATOR + jasperName[i] + PREFIX));
-                    hashMap.put("subreportDataSource" + (i), new JRBeanCollectionDataSource((Collection)beanList.get(i)));
+                    hashMap.put("subreport" + (i), servletContext.getRealPath(JASPER_REPORT_PATH + module + SEPARATOR + jasperName[i] + PREFIX));
+                    hashMap.put("subreportDataSource" + (i), new JRBeanCollectionDataSource((Collection) beanList.get(i)));
                 }
             }
 
             String pdfName = pdfCode.concat("-").concat(DateTimeUtil.dateToString(DateTimeUtil.currentDate(), "yyyyMMddHHmmss"));
 
-            JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource((Collection)beanList.get(0));
+            JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource((Collection) beanList.get(0));
             jasperPrint = JasperFillManager.fillReport(jasperRealPath, hashMap, beanCollectionDataSource);
 
             ExternalContext externalContext = context.getExternalContext();
@@ -193,33 +200,33 @@ public class ReportUtil<T> {
             context.getApplication().getStateManager().saveView(context);
             context.responseComplete();
 
-         } catch (JRException | IOException ex) {
+        } catch (JRException | IOException ex) {
             JsfUtil.addFacesErrorMessage(ex.getMessage());
             LOG.error(ex);
         }
     }
-    
-  public void exportSubReport_Template(String template,String module, String[] jasperName, String pdfCode, HashMap hashMap, List beanList) {
+
+    public void exportSubReport_Template(String template, String module, String[] jasperName, String pdfCode, HashMap hashMap, List beanList) {
         try {
             hashMap.put("logo", getLogo());
             context = FacesContext.getCurrentInstance();
             servletContext = (ServletContext) context.getExternalContext().getContext();
             jasperRealPath = servletContext.getRealPath(JASPER_REPORT_PATH + module + SEPARATOR + jasperName[0] + PREFIX);
-           
-            hashMap.put("template",servletContext.getRealPath("/resources/images/"+template));
+
+            hashMap.put("template", servletContext.getRealPath("/resources/images/" + template));
 
             if (jasperName != null) {
                 for (int i = 1; i < jasperName.length; i++) {
                     hashMap.put("SUBREPORT_DIR", servletContext.getRealPath(JASPER_REPORT_PATH + module + SEPARATOR));
                     //hashMap.put("subreport" + (i), "D:\\Work\\A\\Report\\B101SubReport.jasper");
-                    hashMap.put("subreport" + (i), servletContext.getRealPath(JASPER_REPORT_PATH +module + SEPARATOR + jasperName[i] + PREFIX));
-                    hashMap.put("subreportDataSource" + (i), new JRBeanCollectionDataSource((Collection)beanList.get(i)));
+                    hashMap.put("subreport" + (i), servletContext.getRealPath(JASPER_REPORT_PATH + module + SEPARATOR + jasperName[i] + PREFIX));
+                    hashMap.put("subreportDataSource" + (i), new JRBeanCollectionDataSource((Collection) beanList.get(i)));
                 }
             }
 
             String pdfName = pdfCode.concat("-").concat(DateTimeUtil.dateToString(DateTimeUtil.currentDate(), "yyyyMMddHHmmss"));
 
-            JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource((Collection)beanList.get(0));
+            JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource((Collection) beanList.get(0));
             jasperPrint = JasperFillManager.fillReport(jasperRealPath, hashMap, beanCollectionDataSource);
 
             ExternalContext externalContext = context.getExternalContext();
@@ -230,39 +237,76 @@ public class ReportUtil<T> {
             context.getApplication().getStateManager().saveView(context);
             context.responseComplete();
 
-         } catch (JRException | IOException ex) {
+        } catch (JRException | IOException ex) {
             JsfUtil.addFacesErrorMessage(ex.getMessage());
             LOG.error(ex);
         }
     }
-  
-     public JasperPrint exportSubReport_Template_mearge(String template,String module, String[] jasperName, String pdfCode, HashMap hashMap, List beanList) {
-        JasperPrint jasperPrint1=null;
-       try {
-            hashMap.put("logo", getLogo());
+    
+    public void exportSubReport_Template_1(String template, String module, String[] jasperName, String pdfCode, HashMap hashMap, List beanList) {
+        try {
+            hashMap.put("logo", getLogo1());
             context = FacesContext.getCurrentInstance();
             servletContext = (ServletContext) context.getExternalContext().getContext();
             jasperRealPath = servletContext.getRealPath(JASPER_REPORT_PATH + module + SEPARATOR + jasperName[0] + PREFIX);
-           
-            hashMap.put("template",servletContext.getRealPath("/resources/images/"+template));
+
+            hashMap.put("template", servletContext.getRealPath("/resources/images/" + template));
 
             if (jasperName != null) {
                 for (int i = 1; i < jasperName.length; i++) {
                     hashMap.put("SUBREPORT_DIR", servletContext.getRealPath(JASPER_REPORT_PATH + module + SEPARATOR));
-                    hashMap.put("subreport" + (i), servletContext.getRealPath(JASPER_REPORT_PATH +module + SEPARATOR + jasperName[i] + PREFIX));
-                    hashMap.put("subreportDataSource" + (i), new JRBeanCollectionDataSource((Collection)beanList.get(i)));
+                    hashMap.put("subreport" + (i), servletContext.getRealPath(JASPER_REPORT_PATH + module + SEPARATOR + jasperName[i] + PREFIX));
+                    hashMap.put("subreportDataSource" + (i), new JRBeanCollectionDataSource((Collection) beanList.get(i)));
                 }
             }
-            JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource((Collection)beanList.get(0));
-            jasperPrint1 = JasperFillManager.fillReport(jasperRealPath, hashMap, beanCollectionDataSource);
-            
-       }catch(Exception ex){
+
+            String pdfName = pdfCode.concat("-").concat(DateTimeUtil.dateToString(DateTimeUtil.currentDate(), "yyyyMMddHHmmss"));
+
+            JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource((Collection) beanList.get(0));
+            jasperPrint = JasperFillManager.fillReport(jasperRealPath, hashMap, beanCollectionDataSource);
+
+            ExternalContext externalContext = context.getExternalContext();
+            externalContext.setResponseHeader("Content-Disposition", "attachment; filename=" + pdfName + PREFIX_PDF);
+
+            JasperExportManager.exportReportToPdfStream(jasperPrint, externalContext.getResponseOutputStream());
+
+            context.getApplication().getStateManager().saveView(context);
+            context.responseComplete();
+
+        } catch (JRException | IOException ex) {
             JsfUtil.addFacesErrorMessage(ex.getMessage());
             LOG.error(ex);
-       }
-       return jasperPrint1;
+        }
     }
-  public void exportMearge(String pdfName,List<JasperPrint> jasperPrintList) {
+
+    public JasperPrint exportSubReport_Template_mearge(String template, String module, String[] jasperName, String pdfCode, HashMap hashMap, List beanList) {
+        JasperPrint jasperPrint1 = null;
+        try {
+            hashMap.put("logo", getLogo());
+            context = FacesContext.getCurrentInstance();
+            servletContext = (ServletContext) context.getExternalContext().getContext();
+            jasperRealPath = servletContext.getRealPath(JASPER_REPORT_PATH + module + SEPARATOR + jasperName[0] + PREFIX);
+
+            hashMap.put("template", servletContext.getRealPath("/resources/images/" + template));
+
+            if (jasperName != null) {
+                for (int i = 1; i < jasperName.length; i++) {
+                    hashMap.put("SUBREPORT_DIR", servletContext.getRealPath(JASPER_REPORT_PATH + module + SEPARATOR));
+                    hashMap.put("subreport" + (i), servletContext.getRealPath(JASPER_REPORT_PATH + module + SEPARATOR + jasperName[i] + PREFIX));
+                    hashMap.put("subreportDataSource" + (i), new JRBeanCollectionDataSource((Collection) beanList.get(i)));
+                }
+            }
+            JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource((Collection) beanList.get(0));
+            jasperPrint1 = JasperFillManager.fillReport(jasperRealPath, hashMap, beanCollectionDataSource);
+
+        } catch (Exception ex) {
+            JsfUtil.addFacesErrorMessage(ex.getMessage());
+            LOG.error(ex);
+        }
+        return jasperPrint1;
+    }
+
+    public void exportMearge(String pdfName, List<JasperPrint> jasperPrintList) {
         try {
             context = FacesContext.getCurrentInstance();
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -281,13 +325,166 @@ public class ReportUtil<T> {
                 outputStream.flush();
                 outputStream.close();
             }
-                    
-         } catch (JRException | IOException ex) {
+
+        } catch (JRException | IOException ex) {
             JsfUtil.addFacesErrorMessage(ex.getMessage());
             LOG.error(ex);
         }
     }
-  
+
+    public void exportSubReportQ101(String module, String[] jasperName, String pdfCode, HashMap hashMap, List beanList, String[] pathImg) {
+        try {
+            FacesContext context = FacesContext.getCurrentInstance();
+            ServletContext servletContext = (ServletContext) context.getExternalContext().getContext();
+
+            hashMap.put("logo", servletContext.getRealPath(LOGO_REPORT_PATH));
+            context = FacesContext.getCurrentInstance();
+            servletContext = (ServletContext) context.getExternalContext().getContext();
+            jasperRealPath = servletContext.getRealPath(JASPER_REPORT_PATH + module + SEPARATOR + jasperName[0] + PREFIX);
+
+            if (jasperName != null) {
+                for (int i = 1; i < jasperName.length; i++) {
+                    hashMap.put("SUBREPORT_DIR", servletContext.getRealPath(JASPER_REPORT_PATH + module + SEPARATOR));
+                    hashMap.put("subreport" + (i), servletContext.getRealPath(JASPER_REPORT_PATH + module + SEPARATOR + jasperName[i] + PREFIX));
+                    hashMap.put("subreportDataSource" + (i), new JRBeanCollectionDataSource((Collection) beanList.get(i)));
+                    hashMap.put("img" + (i), pathImg[i - 1]);
+                }
+            }
+
+            String pdfName = pdfCode.concat("-").concat(DateTimeUtil.dateToString(DateTimeUtil.currentDate(), "yyyyMMddHHmmss"));
+
+            JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource((Collection) beanList.get(0));
+            jasperPrint = JasperFillManager.fillReport(jasperRealPath, hashMap, beanCollectionDataSource);
+
+            ExternalContext externalContext = context.getExternalContext();
+            externalContext.setResponseHeader("Content-Disposition", "attachment; filename=" + pdfName + PREFIX_PDF);
+
+            JasperExportManager.exportReportToPdfStream(jasperPrint, externalContext.getResponseOutputStream());
+
+            context.getApplication().getStateManager().saveView(context);
+            context.responseComplete();
+
+        } catch (JRException | IOException ex) {
+            JsfUtil.addFacesErrorMessage(ex.getMessage());
+            LOG.error(ex);
+        }
+    }
+
+    public JasperPrint exportSubReportQ101mearge(String module, String[] jasperName, String pdfCode, HashMap hashMap, List beanList, String[] pathImg) {
+        JasperPrint jasperPrint = null;
+        try {
+            hashMap.put("logo", getLogo());
+            context = FacesContext.getCurrentInstance();
+            servletContext = (ServletContext) context.getExternalContext().getContext();
+            jasperRealPath = servletContext.getRealPath(JASPER_REPORT_PATH + module + SEPARATOR + jasperName[0] + PREFIX);
+
+            if (jasperName != null) {
+                for (int i = 1; i < jasperName.length; i++) {
+                    hashMap.put("SUBREPORT_DIR", servletContext.getRealPath(JASPER_REPORT_PATH + module + SEPARATOR));
+                    hashMap.put("subreport" + (i), servletContext.getRealPath(JASPER_REPORT_PATH + module + SEPARATOR + jasperName[i] + PREFIX));
+                    hashMap.put("subreportDataSource" + (i), new JRBeanCollectionDataSource((Collection) beanList.get(i)));
+                    hashMap.put("img" + (i), pathImg[i - 1]);
+                }
+            }
+            JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource((Collection) beanList.get(0));
+            jasperPrint = JasperFillManager.fillReport(jasperRealPath, hashMap, beanCollectionDataSource);
+
+        } catch (Exception ex) {
+            JsfUtil.addFacesErrorMessage(ex.getMessage());
+            LOG.error(ex);
+        }
+        return jasperPrint;
+    }
+
+    public void exportSubReportQ102(String module, String[] jasperName,String[] subReport,int lenghtReport, String pdfCode, HashMap hashMap, List beanList, String[] pathImg1, String[] pathImg2, String[] pathImg3) {
+        try {
+            FacesContext context = FacesContext.getCurrentInstance();
+            ServletContext servletContext = (ServletContext) context.getExternalContext().getContext();
+
+            hashMap.put("logo", servletContext.getRealPath(LOGO_REPORT_PATH));
+            context = FacesContext.getCurrentInstance();
+            servletContext = (ServletContext) context.getExternalContext().getContext();
+            jasperRealPath = servletContext.getRealPath(JASPER_REPORT_PATH + module + SEPARATOR + jasperName[0] + PREFIX);
+
+            if (jasperName != null) {
+                hashMap.put("SUBREPORT_DIR", servletContext.getRealPath(JASPER_REPORT_PATH + module + SEPARATOR));
+                for (int i = 1; i <= subReport.length; i++) {
+                    hashMap.put("subreport" + (i), servletContext.getRealPath(JASPER_REPORT_PATH + module + SEPARATOR + subReport[i-1] + PREFIX));
+                }
+                for (int i = 1; i <=lenghtReport; i++) {
+                    hashMap.put("subreportDataSource" + (i), new JRBeanCollectionDataSource((Collection) beanList.get(i)));
+                }
+                
+                for (int i = 1; i <= pathImg1.length; i++) {
+                    hashMap.put("img" + (i), pathImg1[i - 1]);
+                }
+                for (int j = 1; j <= pathImg2.length; j++) {
+                    hashMap.put("img" + (j + 4), pathImg2[j - 1]);
+                }
+                for (int i = 1; i <= pathImg3.length; i++) {
+                    hashMap.put("img" + (i + 8), pathImg3[i - 1]);
+                }
+            }
+
+            String pdfName = pdfCode.concat("-").concat(DateTimeUtil.dateToString(DateTimeUtil.currentDate(), "yyyyMMddHHmmss"));
+
+            JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource((Collection) beanList.get(0));
+            jasperPrint = JasperFillManager.fillReport(jasperRealPath, hashMap, beanCollectionDataSource);
+
+            ExternalContext externalContext = context.getExternalContext();
+            externalContext.setResponseHeader("Content-Disposition", "attachment; filename=" + pdfName + PREFIX_PDF);
+
+            JasperExportManager.exportReportToPdfStream(jasperPrint, externalContext.getResponseOutputStream());
+
+            context.getApplication().getStateManager().saveView(context);
+            context.responseComplete();
+
+        } catch (JRException | IOException ex) {
+            JsfUtil.addFacesErrorMessage(ex.getMessage());
+            LOG.error(ex);
+        }
+    }
+    
+    public JasperPrint exportSubReportQ102mearge(String module, String[] jasperName,String[] subReport,int lenghtReport, String pdfCode, HashMap hashMap, List beanList, String[] pathImg1, String[] pathImg2, String[] pathImg3) {
+        try {
+            FacesContext context = FacesContext.getCurrentInstance();
+            ServletContext servletContext = (ServletContext) context.getExternalContext().getContext();
+
+            hashMap.put("logo", servletContext.getRealPath(LOGO_REPORT_PATH));
+            context = FacesContext.getCurrentInstance();
+            servletContext = (ServletContext) context.getExternalContext().getContext();
+            jasperRealPath = servletContext.getRealPath(JASPER_REPORT_PATH + module + SEPARATOR + jasperName[0] + PREFIX);
+
+            if (jasperName != null) {
+                hashMap.put("SUBREPORT_DIR", servletContext.getRealPath(JASPER_REPORT_PATH + module + SEPARATOR));
+                for (int i = 1; i <= subReport.length; i++) {
+                    hashMap.put("subreport" + (i), servletContext.getRealPath(JASPER_REPORT_PATH + module + SEPARATOR + subReport[i-1] + PREFIX));
+                }
+                for (int i = 1; i <=lenghtReport; i++) {
+                    hashMap.put("subreportDataSource" + (i), new JRBeanCollectionDataSource((Collection) beanList.get(i)));
+                }
+                
+                for (int i = 1; i <= pathImg1.length; i++) {
+                    hashMap.put("img" + (i), pathImg1[i - 1]);
+                }
+                for (int j = 1; j <= pathImg2.length; j++) {
+                    hashMap.put("img" + (j + 4), pathImg2[j - 1]);
+                }
+                for (int i = 1; i <= pathImg3.length; i++) {
+                    hashMap.put("img" + (i + 8), pathImg3[i - 1]);
+                }
+            }
+
+            JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource((Collection) beanList.get(0));
+            jasperPrint = JasperFillManager.fillReport(jasperRealPath, hashMap, beanCollectionDataSource);
+
+       } catch (Exception ex) {
+            JsfUtil.addFacesErrorMessage(ex.getMessage());
+            LOG.error(ex);
+        }
+        return jasperPrint;
+    }
+
     public static void main(String[] args) {
     }
 
