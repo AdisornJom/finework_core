@@ -98,7 +98,9 @@ public interface Constants {
     String SEQUNCE_NO_ACC="acc";
     String SEQUNCE_NO_DELIVERY="delivery";
     String SEQUNCE_NO_GOOD_RECEIPT_SALE_INVOICE="goodreceipt|salesinvoice";
+    String SEQUNCE_NO_GOOD_RECEIPT_SALE_INVOICE_NEW="GS";
     String SEQUNCE_WHT="wht";
+    String FORMAT_RUNNING_GOOD_RECEIPT_SALE_INVOICE="000";
     
     String SEQUNCE_NO_QUOTATION="QT";
     String SEQUNCE_NO_QUOTATION2="QT";
